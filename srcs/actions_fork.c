@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:14:23 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/23 15:14:25 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:30:09 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,15 @@
 
 void	get_fork1(t_philo_info *philo_info, int fork1_id)
 {
-	pthread_mutex_lock(&philo_info->info->forks[fork1_id]);
+	pthread_mutex_lock(&philo_info->info->mutex_forks[fork1_id]);
+	philo_info->info->forks[fork1_id] = true;
 	output_message_get_fork(philo_info);
 }
 
 void	get_fork2(t_philo_info *philo_info, int fork2_id)
 {
-	pthread_mutex_lock(&philo_info->info->forks[fork2_id]);
+	pthread_mutex_lock(&philo_info->info->mutex_forks[fork2_id]);
+	philo_info->info->forks[fork2_id] = true;
 	output_message_get_fork(philo_info);
 }
 
@@ -34,6 +36,8 @@ void	take_fork(t_philo_info *philo_info, int fork1_id, int fork2_id)
 
 void	put_fork(t_philo_info *philo_info, int fork1_id, int fork2_id)
 {
-	pthread_mutex_unlock(&philo_info->info->forks[fork1_id]);
-	pthread_mutex_unlock(&philo_info->info->forks[fork2_id]);
+	philo_info->info->forks[fork1_id] = false;
+	philo_info->info->forks[fork2_id] = false;
+	pthread_mutex_unlock(&philo_info->info->mutex_forks[fork1_id]);
+	pthread_mutex_unlock(&philo_info->info->mutex_forks[fork2_id]);
 }

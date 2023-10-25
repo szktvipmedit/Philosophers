@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:14:33 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/23 17:01:34 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:32:52 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,13 @@ int	create_forks(t_info *info)
 	pthread_mutex_t	fork;
 
 	i = 0;
-	info->forks = malloc(sizeof(pthread_mutex_t) * info->num_of_philo);
+	info->mutex_forks = malloc(sizeof(pthread_mutex_t) * info->num_of_philo);
+	if (!info->mutex_forks)
+	{
+		write(2, FAILED_MALLOC, FAILED_MALLOC_CC);
+		return (MALLOC_ERROR);
+	}
+	info->forks = malloc(sizeof(bool) * info->num_of_philo);
 	if (!info->forks)
 	{
 		write(2, FAILED_MALLOC, FAILED_MALLOC_CC);
@@ -32,7 +38,8 @@ int	create_forks(t_info *info)
 			write(2, FAILED_MUTEX_INIT, FAILED_MUTEX_INIT_CC);
 			return (MUTEX_ERROR);
 		}
-		info->forks[i++] = fork;
+		info->mutex_forks[i] = fork;
+		info->forks[i++] = false;
 	}
 	return (0);
 }
@@ -82,6 +89,6 @@ int	init_info(t_info *info, int argc, char **argv)
 		return (MUTEX_ERROR);
 	info->start_time = get_curr_time();
 	info->is_someone_die = 0;
-	info->is_all_thread_create = 0;
+	info->is_all_thread_create = false;
 	return (0);
 }

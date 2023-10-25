@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:23:36 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/23 16:54:45 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:29:53 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <string.h>
 # include <sys/time.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 # define INVALID_NUM_OF_ARG "Error : Invalid number of arguments\n"
 # define INVALID_NUM_OF_ARG_CC 36
@@ -47,6 +48,7 @@ less than or equal to INT_MAX\n"
 
 struct	s_info;
 
+
 typedef struct s_philo_info
 {
 	struct s_info	*info;
@@ -54,7 +56,6 @@ typedef struct s_philo_info
 	size_t			id;
 	size_t			eat_cnt;
 	size_t			is_die;
-	size_t			life;
 	size_t			last_eat_time;
 
 	int				fork1_id;
@@ -69,14 +70,15 @@ typedef struct s_info
 	size_t			time_to_die;
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
-	int				is_must_eat_option;
-	size_t			is_all_thread_create;
+	bool				is_must_eat_option;
+	bool			is_all_thread_create;
 	size_t			must_eat_philo_cnt;
 
 	size_t			start_time;
 
 	pthread_mutex_t	report_die_to_observer;
-	pthread_mutex_t	*forks;
+    bool	*forks;
+	pthread_mutex_t	*mutex_forks;
 	pthread_mutex_t	message_output_auth;
 	t_philo_info	**philo_info;
 }					t_info;

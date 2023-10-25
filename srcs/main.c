@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:14:35 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/23 15:59:01 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:19:49 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_philo_info(t_info *info)
 		i--;
 	}
 	free(info->philo_info);
-	free(info->forks);
+	free(info->mutex_forks);
 	free(info);
 }
 
