@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:23:36 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/25 11:29:53 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:47:15 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ typedef struct s_philo_info
 	size_t			eat_cnt;
 	size_t			is_die;
 	size_t			last_eat_time;
+	pthread_mutex_t		mutex_last_eat_time;
 
 	int				fork1_id;
 	int				fork2_id;

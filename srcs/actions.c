@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:14:28 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/23 16:44:16 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:42:09 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ void	action_eat(t_philo_info *philo_info, int fork1_id, int fork2_id)
 {
 	take_fork(philo_info, fork1_id, fork2_id);
 	output_message_eat(philo_info);
+	pthread_mutex_lock(&philo_info->mutex_last_eat_time);
 	philo_info->last_eat_time = get_curr_time();
+	pthread_mutex_unlock(&philo_info->mutex_last_eat_time);
 	if (philo_info->info->is_must_eat_option && philo_info->eat_cnt != INT_MAX)
 		philo_info->eat_cnt++;
 	ft_usleep(philo_info->info->time_to_eat);

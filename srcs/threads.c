@@ -6,12 +6,24 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:14:40 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/23 17:01:12 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:55:16 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/philo.h"
 
+int check_die_by_time(t_philo_info *philo_info)
+{
+	
+	pthread_mutex_lock(&philo_info->mutex_last_eat_time);
+	if(get_curr_time() - philo_info->last_eat_time > philo_info->info->time_to_die)
+	{
+		pthread_mutex_unlock(&philo_info->mutex_last_eat_time);
+		return 1;
+	}
+	pthread_mutex_unlock(&philo_info->mutex_last_eat_time);
+	return 0; 
+}
 int	check_die(t_info *info)
 {
 	size_t	i;
@@ -19,8 +31,7 @@ int	check_die(t_info *info)
 	i = 0;
 	while (i < info->num_of_philo)
 	{
-		if (get_curr_time()
-			- info->philo_info[i]->last_eat_time > info->time_to_die)
+		if (check_die_by_time(info->philo_info[i]))
 		{
 			pthread_mutex_lock(&info->report_die_to_observer);
 			info->is_someone_die = info->philo_info[i]->id;

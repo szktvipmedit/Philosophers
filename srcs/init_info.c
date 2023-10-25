@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:14:33 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/25 11:32:52 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 11:54:28 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,20 @@ void	store_info_arg_values(t_info *info, int argc, char **argv)
 	}
 }
 
+int init_each_philo_info_mutexes(t_info *info)
+{
+	size_t i;
+	i = 0;
+	pthread_mutex_t	mutex_last_eat_time;
+	if(pthread_mutex_init(&mutex_last_eat_time, NULL) != 0)
+		return (MUTEX_ERROR);
+	while(i < info->num_of_philo)
+	{
+		info->philo_info[i++]->mutex_last_eat_time = mutex_last_eat_time;
+	}
+	return 0;
+}
+
 int	init_info_mutexes(t_info *info)
 {
 	pthread_mutex_t	report_die_to_observer;
@@ -73,6 +87,8 @@ int	init_info_mutexes(t_info *info)
 	if (pthread_mutex_init(&message_output_auth, NULL) != 0)
 		return (mutex_error(info), MUTEX_ERROR);
 	info->message_output_auth = message_output_auth;
+	if(init_each_philo_info_mutexes(info) == MUTEX_ERROR)
+		return (mutex_error(info), MUTEX_ERROR);
 	return (0);
 }
 
