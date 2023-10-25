@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:14:40 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/25 11:55:16 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 16:03:00 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int check_die_by_time(t_philo_info *philo_info)
 	pthread_mutex_unlock(&philo_info->mutex_last_eat_time);
 	return 0; 
 }
+
 int	check_die(t_info *info)
 {
 	size_t	i;
@@ -66,6 +67,18 @@ int	check_must_eat(t_info *info)
 	return (0);
 }
 
+int loop_all_thread_create(t_info *info)
+{
+	pthread_mutex_lock(&info->mutex_is_all_thread_create);
+	if(!info->is_all_thread_create)
+	{
+		pthread_mutex_unlock(&info->mutex_is_all_thread_create);
+		return 1;
+	}
+	pthread_mutex_unlock(&info->mutex_is_all_thread_create);
+	return 0;
+}
+
 void	observer_philo_survive(t_info *info)
 {
 	int				i;
@@ -76,6 +89,6 @@ void	observer_philo_survive(t_info *info)
 		if (check_die(info) || check_must_eat(info))
 			break ;
 	}
-	while (!info->is_all_thread_create)
+	while (loop_all_thread_create(info))
 		(void)i;
 }

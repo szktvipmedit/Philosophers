@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:14:30 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/23 16:59:42 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:58:52 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,9 @@ int	create_threads_philo(t_info *info)
 		}
 		i++;
 	}
+	pthread_mutex_lock(&info->mutex_is_all_thread_create);
 	info->is_all_thread_create = 1;
+	pthread_mutex_unlock(&info->mutex_is_all_thread_create);
 	return (0);
 }
 

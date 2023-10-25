@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:23:36 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/25 11:47:15 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:59:18 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_info
 	size_t			time_to_sleep;
 	bool				is_must_eat_option;
 	bool			is_all_thread_create;
+	pthread_mutex_t			mutex_is_all_thread_create;
 	size_t			must_eat_philo_cnt;
 
 	size_t			start_time;

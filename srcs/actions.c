@@ -6,7 +6,7 @@
 /*   By: kousuzuk <kousuzuk@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 15:14:28 by kousuzuk          #+#    #+#             */
-/*   Updated: 2023/10/25 11:42:09 by kousuzuk         ###   ########.fr       */
+/*   Updated: 2023/10/25 15:56:47 by kousuzuk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,18 @@ void	action_think(t_philo_info *philo_info)
 	output_message_think(philo_info);
 }
 
+int check_is_someone_die(t_philo_info *philo_info)
+{
+	pthread_mutex_lock(&philo_info->info->report_die_to_observer);
+	while(!philo_info->info->is_someone_die)
+	{
+		pthread_mutex_unlock(&philo_info->info->report_die_to_observer);
+		return 1;
+	}
+	pthread_mutex_unlock(&philo_info->info->report_die_to_observer);
+	return 0;
+}
+
 int	philo_life(t_philo_info *philo_info)
 {
 	int	i;
@@ -55,7 +67,7 @@ int	philo_life(t_philo_info *philo_info)
 	action_think(philo_info);
 	if (philo_info->id % 2 == 0)
 		ft_usleep(10);
-	while (!philo_info->info->is_someone_die)
+	while (check_is_someone_die(philo_info))
 	{
 		action_eat(philo_info, philo_info->fork1_id, philo_info->fork2_id);
 		action_sleep(philo_info);
