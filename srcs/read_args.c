@@ -63,11 +63,6 @@ int	arg_error_check(int argc, char **argv)
 
 int	read_input(t_info *info, int argc, char **argv)
 {
-	int	value_check;
-	int	i;
-
-	value_check = 0;
-	i = 0;
 	if (arg_error_check(argc, argv))
 		return (ARG_ERROR);
 	if (args_range_check(argc, argv))

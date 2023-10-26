@@ -72,6 +72,10 @@ int init_each_philo_info_mutexes(t_info *info)
 		if(pthread_mutex_init(&mutex_last_eat_time, NULL) != 0)
 			return (MUTEX_ERROR);
 		info->philo_info[i]->mutex_last_eat_time = mutex_last_eat_time;
+		pthread_mutex_t	mutex_eat_cnt;
+		if(pthread_mutex_init(&mutex_eat_cnt, NULL) != 0)
+			return (MUTEX_ERROR);
+		info->philo_info[i]->mutex_eat_cnt = mutex_eat_cnt;
 		i++;
 	}
 	return 0;

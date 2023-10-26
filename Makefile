@@ -20,7 +20,7 @@ SRCS_DIR = srcs/
 OBJS_DIR = objs/
 INCS_DIR = incs/
 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror #-g -fsanitize=thread
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	mkdir -p $(@D)

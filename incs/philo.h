@@ -55,6 +55,7 @@ typedef struct s_philo_info
 	pthread_t		th;
 	size_t			id;
 	size_t			eat_cnt;
+	pthread_mutex_t		mutex_eat_cnt;
 	size_t			is_die;
 	size_t			last_eat_time;
 	pthread_mutex_t		mutex_last_eat_time;
@@ -120,6 +121,7 @@ int					create_threads_philo(t_info *info);
 int					create_threads(t_info *info);
 
 // threads.c
+int check_eat_cnt(t_philo_info *philo_info);
 void				observer_philo_survive(t_info *info);
 void				observer_die_ditect(t_philo_info *philo_info);
 

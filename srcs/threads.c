@@ -45,6 +45,18 @@ int	check_die(t_info *info)
 	return (0);
 }
 
+int check_eat_cnt(t_philo_info *philo_info)
+{
+	pthread_mutex_lock(&philo_info->mutex_eat_cnt);
+	if(philo_info->eat_cnt == philo_info->info->num_of_each_philo_must_eat)
+	{
+		pthread_mutex_unlock(&philo_info->mutex_eat_cnt);
+		return 1;
+	}
+	pthread_mutex_unlock(&philo_info->mutex_eat_cnt);
+	return 0;
+}
+
 int	check_must_eat(t_info *info)
 {
 	size_t	i;
@@ -54,7 +66,7 @@ int	check_must_eat(t_info *info)
 	must_eat_philo_cnt = 0;
 	while (i < info->num_of_philo)
 	{
-		if (info->philo_info[i++]->eat_cnt == info->num_of_each_philo_must_eat)
+		if (check_eat_cnt(info->philo_info[i++]))
 			must_eat_philo_cnt++;
 	}
 	if (must_eat_philo_cnt == info->num_of_philo)
@@ -81,14 +93,9 @@ int loop_all_thread_create(t_info *info)
 
 void	observer_philo_survive(t_info *info)
 {
-	int				i;
-
-	i = 0;
 	while (1)
 	{
 		if (check_die(info) || check_must_eat(info))
 			break ;
-	}
-	while (loop_all_thread_create(info))
-		(void)i;
+	};
 }
