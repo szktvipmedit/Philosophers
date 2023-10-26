@@ -73,8 +73,6 @@ typedef struct s_info
 	size_t			time_to_eat;
 	size_t			time_to_sleep;
 	bool				is_must_eat_option;
-	bool			is_all_thread_create;
-	pthread_mutex_t			mutex_is_all_thread_create;
 	size_t			must_eat_philo_cnt;
 
 	size_t			start_time;
@@ -83,6 +81,10 @@ typedef struct s_info
     bool	*forks;
 	pthread_mutex_t	*mutex_forks;
 	pthread_mutex_t	message_output_auth;
+	// bool	all_thread_created;
+	// pthread_mutex_t	mutex_all_thread_created;
+	bool	all_thread_finished;
+	pthread_mutex_t	mutex_all_thread_finished;
 	t_philo_info	**philo_info;
 }					t_info;
 
@@ -132,6 +134,7 @@ void				action_eat(t_philo_info *philo_info, int fork1_id,
 void				action_sleep(t_philo_info *philo_info);
 void				action_think(t_philo_info *philo_info);
 int					philo_life(t_philo_info *philo_info);
+int check_is_someone_die(t_philo_info *philo_info);
 
 // actions_fork.c
 void				get_fork1(t_philo_info *philo_info, int fork1_id);

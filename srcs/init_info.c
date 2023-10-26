@@ -85,7 +85,8 @@ int	init_info_mutexes(t_info *info)
 {
 	pthread_mutex_t	report_die_to_observer;
 	pthread_mutex_t	message_output_auth;
-	pthread_mutex_t			mutex_is_all_thread_create;
+	// pthread_mutex_t	mutex_all_thread_created;
+	pthread_mutex_t	mutex_all_thread_finished;
 
 	if (pthread_mutex_init(&report_die_to_observer, NULL) != 0)
 		return (mutex_error(info), MUTEX_ERROR);
@@ -93,9 +94,12 @@ int	init_info_mutexes(t_info *info)
 	if (pthread_mutex_init(&message_output_auth, NULL) != 0)
 		return (mutex_error(info), MUTEX_ERROR);
 	info->message_output_auth = message_output_auth;
-	if (pthread_mutex_init(&mutex_is_all_thread_create, NULL) != 0)
+	// if (pthread_mutex_init(&mutex_all_thread_created, NULL) != 0)
+	// 	return (mutex_error(info), MUTEX_ERROR);
+	// info->mutex_all_thread_created = mutex_all_thread_created;
+	if (pthread_mutex_init(&mutex_all_thread_finished, NULL) != 0)
 		return (mutex_error(info), MUTEX_ERROR);
-	info->mutex_is_all_thread_create = mutex_is_all_thread_create;
+	info->mutex_all_thread_finished = mutex_all_thread_finished;
 	if(init_each_philo_info_mutexes(info) == MUTEX_ERROR)
 		return (mutex_error(info), MUTEX_ERROR);
 	return (0);
@@ -114,6 +118,7 @@ int	init_info(t_info *info, int argc, char **argv)
 		return (MUTEX_ERROR);
 	info->start_time = get_curr_time();
 	info->is_someone_die = 0;
-	info->is_all_thread_create = false;
+	// info->all_thread_created = 0;
+	info->all_thread_finished = 0;
 	return (0);
 }

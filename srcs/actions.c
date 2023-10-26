@@ -21,7 +21,17 @@ void	forkid_init(t_philo_info *philo_info)
 	else
 		philo_info->fork2_id = philo_info->id;
 }
-
+int check_eat_cnt_range(t_philo_info *philo_info)
+{
+	pthread_mutex_lock(&philo_info->mutex_eat_cnt);
+	while(philo_info->info->is_must_eat_option && philo_info->eat_cnt != INT_MAX)
+	{
+		pthread_mutex_unlock(&philo_info->mutex_eat_cnt);
+		return 1;
+	}
+	pthread_mutex_unlock(&philo_info->mutex_eat_cnt);
+	return 0;
+}
 void	action_eat(t_philo_info *philo_info, int fork1_id, int fork2_id)
 {
 	take_fork(philo_info, fork1_id, fork2_id);
@@ -29,12 +39,11 @@ void	action_eat(t_philo_info *philo_info, int fork1_id, int fork2_id)
 	pthread_mutex_lock(&philo_info->mutex_last_eat_time);
 	philo_info->last_eat_time = get_curr_time();
 	pthread_mutex_unlock(&philo_info->mutex_last_eat_time);
-	if (philo_info->info->is_must_eat_option && philo_info->eat_cnt != INT_MAX){
+	if (check_eat_cnt_range(philo_info)){
 		pthread_mutex_lock(&philo_info->mutex_eat_cnt);
 		philo_info->eat_cnt++;
 		pthread_mutex_unlock(&philo_info->mutex_eat_cnt);
 	}
-
 	ft_usleep(philo_info->info->time_to_eat);
 	put_fork(philo_info, fork1_id, fork2_id);
 }
@@ -64,7 +73,6 @@ int check_is_someone_die(t_philo_info *philo_info)
 
 int	philo_life(t_philo_info *philo_info)
 {
-	pthread_detach(philo_info->th);
 	action_think(philo_info);
 	if (philo_info->id % 2 == 0)
 		ft_usleep(10);

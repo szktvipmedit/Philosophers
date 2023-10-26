@@ -42,9 +42,16 @@ int	create_threads_philo(t_info *info)
 		}
 		i++;
 	}
-	pthread_mutex_lock(&info->mutex_is_all_thread_create);
-	info->is_all_thread_create = 1;
-	pthread_mutex_unlock(&info->mutex_is_all_thread_create);
+	i = 0;
+	// pthread_mutex_lock(&info->mutex_all_thread_created);
+	// info->all_thread_created = true;
+	// pthread_mutex_unlock(&info->mutex_all_thread_created);
+	while(i < info->num_of_philo)
+		pthread_join(info->philo_info[i++]->th, NULL);
+	
+	pthread_mutex_lock(&info->mutex_all_thread_finished);
+	info->all_thread_finished = true;
+	pthread_mutex_unlock(&info->mutex_all_thread_finished);
 	return (0);
 }
 

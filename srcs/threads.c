@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "../incs/philo.h"
-
 int check_die_by_time(t_philo_info *philo_info)
 {
 	
@@ -48,7 +47,7 @@ int	check_die(t_info *info)
 int check_eat_cnt(t_philo_info *philo_info)
 {
 	pthread_mutex_lock(&philo_info->mutex_eat_cnt);
-	if(philo_info->eat_cnt == philo_info->info->num_of_each_philo_must_eat)
+	if(philo_info->eat_cnt >= philo_info->info->num_of_each_philo_must_eat)
 	{
 		pthread_mutex_unlock(&philo_info->mutex_eat_cnt);
 		return 1;
@@ -66,8 +65,11 @@ int	check_must_eat(t_info *info)
 	must_eat_philo_cnt = 0;
 	while (i < info->num_of_philo)
 	{
-		if (check_eat_cnt(info->philo_info[i++]))
+		if (check_eat_cnt(info->philo_info[i++])){
 			must_eat_philo_cnt++;
+		}
+		else
+			break;
 	}
 	if (must_eat_philo_cnt == info->num_of_philo)
 	{
@@ -79,23 +81,27 @@ int	check_must_eat(t_info *info)
 	return (0);
 }
 
-int loop_all_thread_create(t_info *info)
+int	 check_all_thread_finished(t_info *info)
 {
-	pthread_mutex_lock(&info->mutex_is_all_thread_create);
-	if(!info->is_all_thread_create)
+	pthread_mutex_lock(&info->mutex_all_thread_finished);
+	if(info->all_thread_finished)
 	{
-		pthread_mutex_unlock(&info->mutex_is_all_thread_create);
+		pthread_mutex_unlock(&info->mutex_all_thread_finished);
 		return 1;
 	}
-	pthread_mutex_unlock(&info->mutex_is_all_thread_create);
+	pthread_mutex_unlock(&info->mutex_all_thread_finished);
 	return 0;
 }
 
 void	observer_philo_survive(t_info *info)
 {
+	
 	while (1)
 	{
 		if (check_die(info) || check_must_eat(info))
 			break ;
 	};
+	if(check_all_thread_finished(info)){
+		return;
+	}
 }

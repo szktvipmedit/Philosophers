@@ -15,7 +15,7 @@
 void	output_message_get_fork(t_philo_info *philo_info)
 {
 	pthread_mutex_lock(&philo_info->info->message_output_auth);
-	if (!philo_info->info->is_someone_die)
+	if (check_is_someone_die(philo_info))
 		printf("%zu %zu has taken a fork\n", get_curr_time()
 			- philo_info->info->start_time, philo_info->id);
 	pthread_mutex_unlock(&philo_info->info->message_output_auth);
@@ -24,7 +24,7 @@ void	output_message_get_fork(t_philo_info *philo_info)
 void	output_message_eat(t_philo_info *philo_info)
 {
 	pthread_mutex_lock(&philo_info->info->message_output_auth);
-	if (!philo_info->info->is_someone_die)
+	if (check_is_someone_die(philo_info))
 		printf("%zu %zu is eating\n", get_curr_time()
 			- philo_info->info->start_time, philo_info->id);
 	pthread_mutex_unlock(&philo_info->info->message_output_auth);
@@ -33,7 +33,7 @@ void	output_message_eat(t_philo_info *philo_info)
 void	output_message_sleep(t_philo_info *philo_info)
 {
 	pthread_mutex_lock(&philo_info->info->message_output_auth);
-	if (!philo_info->info->is_someone_die)
+	if (check_is_someone_die(philo_info))
 		printf("%zu %zu is sleeping\n", get_curr_time()
 			- philo_info->info->start_time, philo_info->id);
 	pthread_mutex_unlock(&philo_info->info->message_output_auth);
@@ -42,7 +42,7 @@ void	output_message_sleep(t_philo_info *philo_info)
 void	output_message_think(t_philo_info *philo_info)
 {
 	pthread_mutex_lock(&philo_info->info->message_output_auth);
-	if (!philo_info->info->is_someone_die)
+	if (check_is_someone_die(philo_info))
 		printf("%zu %zu is thinking\n", get_curr_time()
 			- philo_info->info->start_time, philo_info->id);
 	pthread_mutex_unlock(&philo_info->info->message_output_auth);
