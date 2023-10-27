@@ -8,7 +8,7 @@ void	failed_on_the_way_free_philo_info(t_info *info, int i)
 		free(info->philo_info[i]);
 		i--;
 	}
-    free(info->philo_info[i]);
+	free(info->philo_info[i]);
 }
 
 void	failed_on_the_way_mutex_forks_destroy(t_info *info, int i)
