@@ -11,8 +11,6 @@ int	store_forks(t_info *info)
 		if (pthread_mutex_init(&fork, NULL) != 0)
 		{
 			failed_on_the_way_mutex_forks_destroy(info, i);
-			free(info->mutex_forks);
-			free(info->forks);
 			return (write(STDERR, FAILED_MUTEX_INIT, FAILED_MUTEX_INIT_WC),
 				MUTEX_ERROR);
 		}
