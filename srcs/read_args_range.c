@@ -10,16 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../incs/philo.h"
 
 int	arg_range_check(char **argv, int i)
 {
 	if (atos(argv[i]) == 0 || atos(argv[i]) > INT_MAX)
-	{
-		write(2, INVALID_NUM_OF_PHILO, INVALID_NUM_OF_PHILO_CC);
-		return (ARG_ERROR);
-	}
-	return (0);
+		return (write(STDERR, INVALID_NUM_OF_PHILO, INVALID_NUM_OF_PHILO_WC), ARG_ERROR);
+	return (NEXT_STEP);
 }
 
 int	args_range_check(int argc, char **argv)
@@ -37,5 +34,5 @@ int	args_range_check(int argc, char **argv)
 		if (arg_range_check(argv, 5))
 			return (ARG_ERROR);
 	}
-	return (0);
+	return (NEXT_STEP);
 }

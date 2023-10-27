@@ -27,7 +27,7 @@ int	not_admit_minus_or_char(int i, char **argv)
 			return (ARG_ERROR);
 		j++;
 	}
-	return (0);
+	return (NEXT_STEP);
 }
 
 int	input_value_check(int argc, char **argv)
@@ -43,22 +43,16 @@ int	input_value_check(int argc, char **argv)
 			return (ARG_ERROR);
 		i++;
 	}
-	return (0);
+	return (NEXT_STEP);
 }
 
 int	arg_error_check(int argc, char **argv)
 {
 	if (argc != TRUE_ARG_CNT_DEFAULT && argc != TRUE_ARG_CNT_OPTION)
-	{
-		write(2, INVALID_NUM_OF_ARG, INVALID_NUM_OF_ARG_CC);
-		return (ARG_ERROR);
-	}
+		return (write(STDERR, INVALID_NUM_OF_ARG, INVALID_NUM_OF_ARG_WC), ARG_ERROR);
 	if (input_value_check(argc, argv))
-	{
-		write(2, INVALID_VALUE_OF_ARG, INVALID_VALUE_OF_ARG_CC);
-		return (ARG_ERROR);
-	}
-	return (0);
+		return (write(STDERR, INVALID_VALUE_OF_ARG, INVALID_VALUE_OF_ARG_WC), ARG_ERROR);
+	return (NEXT_STEP);
 }
 
 int	read_input(t_info *info, int argc, char **argv)
@@ -69,5 +63,5 @@ int	read_input(t_info *info, int argc, char **argv)
 		return (ARG_ERROR);
 	if (init_info(info, argc, argv))
 		return (MUTEX_ERROR);
-	return (0);
+	return (NEXT_STEP);
 }

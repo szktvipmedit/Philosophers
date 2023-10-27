@@ -12,21 +12,7 @@
 
 #include "../incs/philo.h"
 
-int	create_thread_observer(t_info *info)
-{
-	pthread_t	observer;
-
-	if (pthread_create(&observer, NULL, (void *)observer_philo_survive,
-			(void *)info))
-	{
-		free_philo_info(info);
-		write(2, FAILED_PTHREAD_CREATE, FAILED_PTHREAD_CREATE_CC);
-		return (PTHREAD_ERROR);
-	}
-	return (0);
-}
-
-int	create_threads_philo(t_info *info)
+int all_philo_create(t_info *info)
 {
 	size_t	i;
 
@@ -37,27 +23,63 @@ int	create_threads_philo(t_info *info)
 				(void *)info->philo_info[i]))
 		{
 			free_philo_info(info);
-			write(2, FAILED_PTHREAD_CREATE, FAILED_PTHREAD_CREATE_CC);
-			return (PTHREAD_ERROR);
+			return (write(STDERR, FAILED_PTHREAD_CREATE, FAILED_PTHREAD_CREATE_WC), PTHREAD_ERROR);
 		}
 		i++;
 	}
+	return NEXT_STEP;
+}
+
+int all_philo_join(t_info *info)
+{
+	size_t i;
 	i = 0;
-	// pthread_mutex_lock(&info->mutex_all_thread_created);
-	// info->all_thread_created = true;
-	// pthread_mutex_unlock(&info->mutex_all_thread_created);
 	while(i < info->num_of_philo)
-		pthread_join(info->philo_info[i++]->th, NULL);
+	{
+		if(pthread_join(info->philo_info[i++]->th, NULL) != 0)
+			return (write(STDERR, FAILED_PTHREAD_JOIN, FAILED_PTHREAD_JOIN_WC), JOIN_ERROR);
+	}
+	return NEXT_STEP;
+}
+
+int	create_philo(t_info *info)
+{
+	if(all_philo_create(info))
+	{
+		free_philo_info(info);
+		return PTHREAD_ERROR;
+	}
+	if(all_philo_join(info))
+	{
+		free_philo_info(info);
+		return JOIN_ERROR;
+	}
 	
 	pthread_mutex_lock(&info->mutex_all_thread_finished);
 	info->all_thread_finished = true;
 	pthread_mutex_unlock(&info->mutex_all_thread_finished);
-	return (0);
+	return (NEXT_STEP);
+}
+
+int create_observer(t_info *info, pthread_t *observer)
+{
+	if (pthread_create(observer, NULL, (void *)observer_philo_survive,
+			(void *)info))
+	{
+		free_philo_info(info);
+		return (write(STDERR, FAILED_PTHREAD_CREATE, FAILED_PTHREAD_CREATE_WC), PTHREAD_ERROR);
+	}
+	return NEXT_STEP;
 }
 
 int	create_threads(t_info *info)
 {
-	if (create_threads_philo(info))
+	pthread_t	observer;
+	
+	if (create_observer(info, &observer))
 		return (PTHREAD_ERROR);
-	return (0);
+	if (create_philo(info))
+		return (PTHREAD_ERROR);
+	pthread_join(observer, NULL);
+	return (NEXT_STEP);
 }

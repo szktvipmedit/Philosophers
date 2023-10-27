@@ -11,97 +11,29 @@
 /* ************************************************************************** */
 
 #include "../incs/philo.h"
-int check_die_by_time(t_philo_info *philo_info)
-{
-	
-	pthread_mutex_lock(&philo_info->mutex_last_eat_time);
-	if(get_curr_time() - philo_info->last_eat_time > philo_info->info->time_to_die)
-	{
-		pthread_mutex_unlock(&philo_info->mutex_last_eat_time);
-		return 1;
-	}
-	pthread_mutex_unlock(&philo_info->mutex_last_eat_time);
-	return 0; 
-}
-
-int	check_die(t_info *info)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < info->num_of_philo)
-	{
-		if (check_die_by_time(info->philo_info[i]))
-		{
-			pthread_mutex_lock(&info->report_die_to_observer);
-			info->is_someone_die = info->philo_info[i]->id;
-			output_message_die(info);
-			pthread_mutex_unlock(&info->report_die_to_observer);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int check_eat_cnt(t_philo_info *philo_info)
-{
-	pthread_mutex_lock(&philo_info->mutex_eat_cnt);
-	if(philo_info->eat_cnt >= philo_info->info->num_of_each_philo_must_eat)
-	{
-		pthread_mutex_unlock(&philo_info->mutex_eat_cnt);
-		return 1;
-	}
-	pthread_mutex_unlock(&philo_info->mutex_eat_cnt);
-	return 0;
-}
-
-int	check_must_eat(t_info *info)
-{
-	size_t	i;
-	size_t	must_eat_philo_cnt;
-
-	i = 0;
-	must_eat_philo_cnt = 0;
-	while (i < info->num_of_philo)
-	{
-		if (check_eat_cnt(info->philo_info[i++])){
-			must_eat_philo_cnt++;
-		}
-		else
-			break;
-	}
-	if (must_eat_philo_cnt == info->num_of_philo)
-	{
-		pthread_mutex_lock(&info->report_die_to_observer);
-		info->is_someone_die = 1;
-		pthread_mutex_unlock(&info->report_die_to_observer);
-		return (1);
-	}
-	return (0);
-}
-
-int	 check_all_thread_finished(t_info *info)
-{
-	pthread_mutex_lock(&info->mutex_all_thread_finished);
-	if(info->all_thread_finished)
-	{
-		pthread_mutex_unlock(&info->mutex_all_thread_finished);
-		return 1;
-	}
-	pthread_mutex_unlock(&info->mutex_all_thread_finished);
-	return 0;
-}
 
 void	observer_philo_survive(t_info *info)
 {
 	
 	while (1)
 	{
-		if (check_die(info) || check_must_eat(info))
+		if (check_die_in_observer(info) || check_must_eat_in_observer(info))
 			break ;
-	};
-	if(check_all_thread_finished(info)){
-		return;
 	}
+	if(check_all_thread_finished(info))
+		return;
+}
+
+int	philo_life(t_philo_info *philo_info)
+{
+	action_think(philo_info);
+	if (philo_info->id % 2 == 0)
+		ft_usleep(10);
+	while (check_is_someone_die(philo_info))
+	{
+		action_eat(philo_info, philo_info->fork1_id, philo_info->fork2_id);
+		action_sleep(philo_info);
+		action_think(philo_info);
+	}
+	return (EXIT);
 }

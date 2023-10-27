@@ -10,10 +10,4 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
-
-void	mutex_error(t_info *info)
-{
-	free_philo_info(info);
-	write(2, FAILED_MUTEX_INIT, FAILED_MUTEX_INIT_CC);
-}
+#include "../incs/philo.h"

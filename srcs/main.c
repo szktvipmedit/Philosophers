@@ -12,18 +12,38 @@
 
 #include "../incs/philo.h"
 
-void	free_philo_info(t_info *info)
+void	clean_forks(t_info *info)
+{
+	int	i;
+	i = info->num_of_philo - 1;
+	while (0 <= i)
+	{
+		pthread_mutex_destroy(&info->mutex_forks[i]);
+		i--;
+	}
+	free(info->mutex_forks);
+	free(info->forks);
+}
+
+void	clean_all_values(t_info *info)
 {
 	int	i;
 
 	i = info->num_of_philo - 1;
 	while (0 <= i)
 	{
+		pthread_mutex_destroy(&info->philo_info[i]->mutex_eat_cnt);
+		pthread_mutex_destroy(&info->philo_info[i]->mutex_last_eat_time);
+		pthread_mutex_destroy(&info->mutex_forks[i]);
 		free(info->philo_info[i]);
 		i--;
 	}
+	pthread_mutex_destroy(&info->report_die_to_observer);
+	pthread_mutex_destroy(&info->message_output_auth);
+	pthread_mutex_destroy(&info->mutex_all_thread_finished);
 	free(info->philo_info);
 	free(info->mutex_forks);
+	free(info->forks);
 	free(info);
 }
 
@@ -35,37 +55,62 @@ void	failed_on_the_way_free_philo_info(t_info *info, int i)
 		free(info->philo_info[i]);
 		i--;
 	}
-	free(info);
 }
+
+void	failed_on_the_way_mutex_forks_destroy(t_info *info, int i)
+{
+	--i;
+	while (i >= 0)
+	{
+		pthread_mutex_destroy(&info->mutex_forks[i]);
+		i--;
+	}
+}
+
+void	failed_on_the_way_each_philo_info_mutex_destroy(t_info *info, int i, int is_eat_cnt)
+{
+	if(is_eat_cnt)
+		pthread_mutex_destroy(&info->philo_info[i]->mutex_last_eat_time);
+	--i;
+	while (i >= 0)
+	{
+		pthread_mutex_destroy(&info->philo_info[i]->mutex_last_eat_time);
+		pthread_mutex_destroy(&info->philo_info[i]->mutex_eat_cnt);
+		i--;
+	}
+}
+
+void	free_philo_info(t_info *info)
+{
+	int	i;
+
+	i = info->num_of_philo - 1;
+	while (0 <= i)
+	{
+		free(info->philo_info[i]);
+				i--;
+	}
+	free(info->philo_info);
+}
+
 
 // __attribute__((destructor))
 // static void destructor() {
 //     system("leaks -q philo");
 // }
 
+//freeやdestroyは確定する時の最下層で行う
 int	main(int argc, char **argv)
 {
 	t_info		*info;
-	pthread_t	observer;
 
 	info = (t_info *)malloc(sizeof(t_info));
 	if (!info)
-	{
-		write(2, FAILED_MALLOC, FAILED_MALLOC_CC);
-		return (0);
-	}
+		return (write(STDERR, FAILED_MALLOC, FAILED_MALLOC_WC), EXIT);
 	if (read_input(info, argc, argv))
-		return (0);
-	if (pthread_create(&observer, NULL, (void *)observer_philo_survive,
-			(void *)info))
-	{
-		free_philo_info(info);
-		write(2, FAILED_PTHREAD_CREATE, FAILED_PTHREAD_CREATE_CC);
-		return (PTHREAD_ERROR);
-	}
+		return (free(info), EXIT);
 	if (create_threads(info))
-		return (0);
-	pthread_join(observer, NULL);
-	free_philo_info(info);
-	return (0);
+		return (clean_all_values(info), EXIT);
+	clean_all_values(info);
+	return (SUCCESS);
 }

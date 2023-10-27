@@ -10,7 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../incs/philo.h"
+
+void	forkid_init(t_philo_info *philo_info)
+{
+	philo_info->fork1_id = philo_info->id - 1;
+	if (philo_info->id == philo_info->info->num_of_philo
+		&& philo_info->info->num_of_philo != 1)
+		philo_info->fork2_id = 0;
+	else
+		philo_info->fork2_id = philo_info->id;
+}
 
 void	init_philo_info(t_info *info, t_philo_info *philo_info, int i)
 {
@@ -49,3 +59,4 @@ int	create_philo_info(t_info *info)
 	}
 	return (0);
 }
+

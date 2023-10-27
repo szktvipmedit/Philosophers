@@ -51,7 +51,9 @@ void	output_message_think(t_philo_info *philo_info)
 void	output_message_die(t_info *info)
 {
 	pthread_mutex_lock(&info->message_output_auth);
+	pthread_mutex_lock(&info->report_die_to_observer);
 	printf("%zu %d died\n", get_curr_time() - info->start_time,
 		info->is_someone_die);
+	pthread_mutex_unlock(&info->report_die_to_observer);
 	pthread_mutex_unlock(&info->message_output_auth);
 }

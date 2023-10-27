@@ -5,9 +5,11 @@ SRCS = srcs/main.c \
 	   srcs/init_philo_info.c \
 	   srcs/create_threads.c \
 	   srcs/threads.c \
+	   srcs/thread_observer_utils.c \
 	   srcs/actions.c \
 	   srcs/actions_fork.c \
 	   srcs/actions_output_message.c \
+	   srcs/mutex_check.c \
 	   srcs/utils.c \
 	   srcs/error.c
 
@@ -20,7 +22,8 @@ SRCS_DIR = srcs/
 OBJS_DIR = objs/
 INCS_DIR = incs/
 
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=thread
+CFLAGS = -Wall -Wextra -Werror
+#CFLAGS +=-g -fsanitize=thread
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	mkdir -p $(@D)
