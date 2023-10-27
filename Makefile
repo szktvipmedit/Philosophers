@@ -2,6 +2,7 @@ SRCS = srcs/main.c \
 	   srcs/read_args.c	\
 	   srcs/read_args_range.c \
 	   srcs/init_info.c \
+	   srcs/init_info_create_forks.c \
 	   srcs/init_philo_info.c \
 	   srcs/create_threads.c \
 	   srcs/threads.c \
@@ -10,8 +11,8 @@ SRCS = srcs/main.c \
 	   srcs/actions_fork.c \
 	   srcs/actions_output_message.c \
 	   srcs/mutex_check.c \
+	   srcs/clean_utils.c \
 	   srcs/utils.c \
-	   srcs/error.c
 
 	   
 OBJS = ${patsubst $(SRCS_DIR)%.c,  $(OBJS_DIR)%.o, $(SRCS)}

@@ -15,7 +15,8 @@
 int	arg_range_check(char **argv, int i)
 {
 	if (atos(argv[i]) == 0 || atos(argv[i]) > INT_MAX)
-		return (write(STDERR, INVALID_NUM_OF_PHILO, INVALID_NUM_OF_PHILO_WC), ARG_ERROR);
+		return (write(STDERR, INVALID_NUM_OF_PHILO, INVALID_NUM_OF_PHILO_WC),
+			ARG_ERROR);
 	return (NEXT_STEP);
 }
 

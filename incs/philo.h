@@ -56,7 +56,7 @@ less than or equal to INT_MAX\n"
 # define MALLOC_ERROR 1
 # define JOIN_ERROR 1
 
-struct s_info;
+struct	s_info;
 
 typedef struct s_philo_info
 {
@@ -112,11 +112,14 @@ int					read_input(t_info *info, int argc, char **argv);
 int					arg_range_check(char **argv, int i);
 int					args_range_check(int argc, char **argv);
 
-// init.c
-int					create_forks(t_info *info);
+// init_info.c
 void				store_info_arg_values(t_info *info, int argc, char **argv);
 int					init_info_mutexes(t_info *info);
 int					init_info(t_info *info, int argc, char **argv);
+
+//init_info_create_forks.c
+int					store_forks(t_info *info);
+int					create_forks(t_info *info);
 
 // init_philo_info.c
 void				forkid_init(t_philo_info *philo_info);
@@ -140,8 +143,10 @@ void				stop_philo_life_by_edit_is_someone_die(t_info *info);
 int					check_die_in_observer(t_info *info);
 void				count_must_eat_philo(t_info *info,
 						size_t *must_eat_philo_cnt);
-void  count_must_eat_philo(t_info *info, size_t *must_eat_philo_cnt);
-int	check_must_eat_in_observer(t_info *info);
+void				count_must_eat_philo(t_info *info,
+						size_t *must_eat_philo_cnt);
+int					check_must_eat_in_observer(t_info *info);
+
 // actions.c
 void				update_last_eat_time(t_philo_info *philo_info);
 void				action_eat(t_philo_info *philo_info, int fork1_id,
@@ -172,12 +177,15 @@ int					check_all_thread_finished(t_info *info);
 int					check_die_by_time(t_philo_info *philo_info);
 
 // main.c
+void				clean_all_values(t_info *info);
 void				clean_forks(t_info *info);
-void				failed_on_the_way_mutex_forks_destroy(t_info *info, int i);
-void				failed_on_the_way_each_philo_info_mutex_destroy(t_info *info,
-						int i, int is_eat_cnt);
 void				free_philo_info(t_info *info);
 void				failed_on_the_way_free_philo_info(t_info *info, int i);
 
-// error.c
+// clean_utils.c
+void				failed_on_the_way_free_philo_info(t_info *info, int i);
+void				failed_on_the_way_mutex_forks_destroy(t_info *info, int i);
+void				failed_on_the_way_each_philo_info_mutex_destroy(
+						t_info *info, int i, int is_eat_cnt);
+
 #endif

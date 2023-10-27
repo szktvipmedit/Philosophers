@@ -49,9 +49,11 @@ int	input_value_check(int argc, char **argv)
 int	arg_error_check(int argc, char **argv)
 {
 	if (argc != TRUE_ARG_CNT_DEFAULT && argc != TRUE_ARG_CNT_OPTION)
-		return (write(STDERR, INVALID_NUM_OF_ARG, INVALID_NUM_OF_ARG_WC), ARG_ERROR);
+		return (write(STDERR, INVALID_NUM_OF_ARG, INVALID_NUM_OF_ARG_WC),
+			ARG_ERROR);
 	if (input_value_check(argc, argv))
-		return (write(STDERR, INVALID_VALUE_OF_ARG, INVALID_VALUE_OF_ARG_WC), ARG_ERROR);
+		return (write(STDERR, INVALID_VALUE_OF_ARG, INVALID_VALUE_OF_ARG_WC),
+			ARG_ERROR);
 	return (NEXT_STEP);
 }
 

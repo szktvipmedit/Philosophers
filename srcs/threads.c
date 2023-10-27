@@ -14,14 +14,13 @@
 
 void	observer_philo_survive(t_info *info)
 {
-	
 	while (1)
 	{
 		if (check_die_in_observer(info) || check_must_eat_in_observer(info))
 			break ;
 	}
-	if(check_all_thread_finished(info))
-		return;
+	if (check_all_thread_finished(info))
+		return ;
 }
 
 int	philo_life(t_philo_info *philo_info)

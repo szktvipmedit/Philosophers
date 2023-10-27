@@ -1,10 +1,10 @@
 #include "../incs/philo.h"
 
-void stop_philo_life_by_edit_is_someone_die(t_info *info)
+void	stop_philo_life_by_edit_is_someone_die(t_info *info)
 {
-		pthread_mutex_lock(&info->report_die_to_observer);
-		info->is_someone_die = 1;
-		pthread_mutex_unlock(&info->report_die_to_observer);
+	pthread_mutex_lock(&info->report_die_to_observer);
+	info->is_someone_die = 1;
+	pthread_mutex_unlock(&info->report_die_to_observer);
 }
 
 int	check_die_in_observer(t_info *info)
@@ -25,17 +25,18 @@ int	check_die_in_observer(t_info *info)
 	return (CONTINUE_LOOP);
 }
 
-void  count_must_eat_philo(t_info *info, size_t *must_eat_philo_cnt)
+void	count_must_eat_philo(t_info *info, size_t *must_eat_philo_cnt)
 {
 	size_t	i;
+
 	i = 0;
-    (void)must_eat_philo_cnt;
+	(void)must_eat_philo_cnt;
 	while (i < info->num_of_philo)
 	{
 		if (check_eat_cnt(info->philo_info[i++]))
 			(*must_eat_philo_cnt)++;
 		else
-			break;
+			break ;
 	}
 }
 

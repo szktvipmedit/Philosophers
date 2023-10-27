@@ -15,6 +15,7 @@
 void	clean_forks(t_info *info)
 {
 	int	i;
+
 	i = info->num_of_philo - 1;
 	while (0 <= i)
 	{
@@ -47,39 +48,6 @@ void	clean_all_values(t_info *info)
 	free(info);
 }
 
-void	failed_on_the_way_free_philo_info(t_info *info, int i)
-{
-	--i;
-	while (i >= 0)
-	{
-		free(info->philo_info[i]);
-		i--;
-	}
-}
-
-void	failed_on_the_way_mutex_forks_destroy(t_info *info, int i)
-{
-	--i;
-	while (i >= 0)
-	{
-		pthread_mutex_destroy(&info->mutex_forks[i]);
-		i--;
-	}
-}
-
-void	failed_on_the_way_each_philo_info_mutex_destroy(t_info *info, int i, int is_eat_cnt)
-{
-	if(is_eat_cnt)
-		pthread_mutex_destroy(&info->philo_info[i]->mutex_last_eat_time);
-	--i;
-	while (i >= 0)
-	{
-		pthread_mutex_destroy(&info->philo_info[i]->mutex_last_eat_time);
-		pthread_mutex_destroy(&info->philo_info[i]->mutex_eat_cnt);
-		i--;
-	}
-}
-
 void	free_philo_info(t_info *info)
 {
 	int	i;
@@ -88,21 +56,20 @@ void	free_philo_info(t_info *info)
 	while (0 <= i)
 	{
 		free(info->philo_info[i]);
-				i--;
+		i--;
 	}
 	free(info->philo_info);
 }
 
-
-// __attribute__((destructor))
-// static void destructor() {
-//     system("leaks -q philo");
+// __attribute__((destructor)) static void destructor()
+// {
+// 	system("leaks -q philo");
 // }
 
-//freeやdestroyは確定する時の最下層で行う
+// freeやdestroyは確定する時の最下層で行う
 int	main(int argc, char **argv)
 {
-	t_info		*info;
+	t_info	*info;
 
 	info = (t_info *)malloc(sizeof(t_info));
 	if (!info)

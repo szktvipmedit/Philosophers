@@ -59,4 +59,3 @@ int	create_philo_info(t_info *info)
 	}
 	return (0);
 }
-
