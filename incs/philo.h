@@ -183,6 +183,7 @@ void				free_philo_info(t_info *info);
 void				failed_on_the_way_free_philo_info(t_info *info, int i);
 
 // clean_utils.c
+void    mutex_destroy(pthread_mutex_t *ptr);
 void				failed_on_the_way_free_philo_info(t_info *info, int i);
 void				failed_on_the_way_mutex_forks_destroy(t_info *info, int i);
 void				failed_on_the_way_each_philo_info_mutex_destroy(

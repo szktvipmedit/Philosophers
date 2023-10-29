@@ -19,7 +19,7 @@ void	clean_forks(t_info *info)
 	i = info->num_of_philo - 1;
 	while (0 <= i)
 	{
-		pthread_mutex_destroy(&info->mutex_forks[i]);
+		mutex_destroy(&info->mutex_forks[i]);
 		i--;
 	}
 	free(info->mutex_forks);
@@ -33,15 +33,15 @@ void	clean_all_values(t_info *info)
 	i = info->num_of_philo - 1;
 	while (0 <= i)
 	{
-		pthread_mutex_destroy(&info->philo_info[i]->mutex_eat_cnt);
-		pthread_mutex_destroy(&info->philo_info[i]->mutex_last_eat_time);
-		pthread_mutex_destroy(&info->mutex_forks[i]);
+		mutex_destroy(&info->philo_info[i]->mutex_eat_cnt);
+		mutex_destroy(&info->philo_info[i]->mutex_last_eat_time);
+		mutex_destroy(&info->mutex_forks[i]);
 		free(info->philo_info[i]);
 		i--;
 	}
-	pthread_mutex_destroy(&info->report_die_to_observer);
-	pthread_mutex_destroy(&info->message_output_auth);
-	pthread_mutex_destroy(&info->mutex_all_thread_finished);
+	mutex_destroy(&info->report_die_to_observer);
+	mutex_destroy(&info->message_output_auth);
+	mutex_destroy(&info->mutex_all_thread_finished);
 	free(info->philo_info);
 	free(info->mutex_forks);
 	free(info->forks);
